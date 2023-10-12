@@ -1,8 +1,9 @@
 // src/cli.rs
 use std::path::PathBuf;
 use clap::{arg, command, value_parser, ArgAction, Command, ArgMatches};
+use crate::task::Task;
 
-mod localStorage;
+use crate::localStorage;
 
 pub fn run_cli() {
     let matches = create_cli().get_matches();
@@ -12,7 +13,15 @@ pub fn run_cli() {
 
     if let Some(matches) = matches.subcommand_matches("add") {
         if let Some(title) = matches.get_one::<String>("title") {
-            localStorage::add_todo_list(title.clone());
+            if let Some(discription) = matches.get_one::<String>("discription") {
+            let task=Task{
+                id:0,
+                name:title.clone(),
+                completed:false,
+                description:discription.clone()
+            };
+            localStorage::add_todo_list(task);
+            }
         }
     }
 
